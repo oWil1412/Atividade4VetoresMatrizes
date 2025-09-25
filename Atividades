@@ -3,96 +3,169 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        System.out.println("Escolha qual atividade quer rodar:\nDigite 1 - Matriz 3x3\nDigite 2 - Matriz 4x4 em Exibição Diagonal\nDigite 3 - Matriz 3x3 com Soma de linhas e colunas");
-        int atv = input.nextInt();
-        switch(atv){
-            case 1:
-                matriz3x3();
-                break;
-            case 2:
-                matriz4x4();
-                break;
-            case 3:
-                soma();
-                break;
+        System.out.println("Escolha qual atividade quer rodar:\n1 - Matriz 5x5\n2 - Matriz 3x2\n3 - Jogo da Velha\n4 - Notas de 5 Alunos\n5 - Batalha Naval");
+        int escolha = input.nextInt();
+        switch (escolha) {
+            case 1 ->{
+                matriz5x5();
+            }
+            case 2 ->{
+                matriz3x2();
+            }
+            case 3 ->{
+                jogoDaVelha();
+            }
+            case 4 ->{
+                notas();
+            }
+            case 5 ->{
+                batalhaNaval();
+            }
         }
-        input.close();
     }
-    public static void matriz3x3(){
+    public static void matriz5x5(){
+        int[][] matriz = {
+            {1, 0, 0, 0, 0},
+            {0, 1, 0, 0, 0},
+            {0, 0, 1, 0, 0},
+            {0, 0, 0, 1, 0},
+            {0, 0, 0, 0, 1}};
+        for (int i = 0; i < matriz.length; i++){
+            for (int j = 0; j < matriz[i].length; j++){
+                System.out.print(matriz[i][j]);
+            }
+            System.out.println();
+        }
+    }
+    public static void matriz3x2(){
         Scanner input = new Scanner(System.in);
-        int[] matriz = new int[9];
+        int[] matriz = new int[6];
         int temp = 0;
         for(int i = 0; i < matriz.length; i++){
-            System.out.println("Digite o "+(i+1)+"° número: ");
+            System.out.println("Digite o "+(i+1)+" valor:");
             matriz[i] = input.nextInt();
         }
-        for(int i = 0; i < 3; i++){
-            System.out.print("\n");
-            for(int j = 0; j < 3; j++) {
-                System.out.print(matriz[temp]+" ");
+        for(int i = 0; i < 2; i++){
+            System.out.println();
+            for(int j = 0; j < 3; j++){
+                System.out.print(matriz[temp]);
                 temp++;
             }
         }
-        input.close();
     }
-    public static void matriz4x4(){
+    public static void jogoDaVelha(){
         Scanner input = new Scanner(System.in);
-        int[] matriz = new int[16];
-        int temp = 0;
-        int[] diag = new int[4];
-        int exe = 0;// (executor) pega o num e joga pro vetor
-        for(int i = 0; i < matriz.length; i++){
-            System.out.println("Digite o "+(i+1)+"° número: ");
-            matriz[i] = input.nextInt();
-        }
-        for(int i = 0; i < 4; i++){
-            /*System.out.print("\n");
-            for(int j = 0; j < 4; j++) {
-                System.out.print(matriz[temp]+" ");
-                temp++;
-            }*/ //descomente as linhas acima para ver a matriz completa
-            diag[i] = matriz[exe]; //na primeira execução o exe é igual a 0 então pega o valor 1x1 da matriz
-            exe += 5; //na segunda execução o exe + 5 estará na posição 2x2 e assim em diante.
-        }
-        System.out.print("\nPrimeira diagonal (1x1 -> 4x4): ");
-        for(int i = 0; i < diag.length; i++) {
-            System.out.print(diag[i]+" ");
-        }
-        input.close();
-    }
-    public static void soma(){
-        Scanner input = new Scanner(System.in);
-        int[] matriz = new int[9];
-        int temp = 0;
-        int[] somaLinhas = new int[3];
-        int[] somaColunas = new int[3];
-        for(int i = 0; i < matriz.length; i++){
-            System.out.println("Digite o "+(i+1)+"° número: ");
-            matriz[i] = input.nextInt();
-        }
-        for(int i = 0; i < 3; i++){
-            System.out.print("\n");
-            for(int j = 0; j < 3; j++) {
-                System.out.print(matriz[temp]+" ");
-                somaLinhas[i] += matriz[temp];
-                temp++;
+        char[][] matriz = new char[3][3];
+        char jogador = 'X';
+        int jogadas = 0;
+        boolean venceu = false;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                matriz[i][j] = ' ';
             }
         }
-        int j = 0;
-        for(int i = 0; i < 3; i++){
-            j = i;
-            for(int k = 0; k < 3; k++){
-                somaColunas[i] += matriz[j];
-                j += 3;
+        while(!venceu && jogadas < 9){
+            mostrarTabuleiro(matriz);
+            System.out.print("Jogador "+jogador+" Escolha a linha (de 0 a 2): ");
+            int posL = input.nextInt();
+            System.out.println("Jogador "+jogador+" Escolha a coluna (de 0 a 2): ");
+            int posC = input.nextInt();
+
+            if(posL < 0 || posL > 2 || posC < 0 || posC > 2){
+                System.out.println("Posição inválida");
+                continue;
+            }
+            if(matriz[posL][posC] != ' '){
+                System.out.println("Essa posição já está ocupada");
+                continue;
+            }
+            matriz[posL][posC] = jogador;
+            jogadas++;
+            if(verificaVitoria(matriz, jogador)){
+                mostrarTabuleiro(matriz);
+                System.out.println("Jogador "+jogador+" venceu!");
+                venceu = true;
+            }else{
+                jogador = (jogador == 'X') ? 'O' : 'X';
             }
         }
-        System.out.println("\n");
+        if(!venceu){
+            mostrarTabuleiro(matriz);
+            System.out.println("empate");
+        }
+    }
+    public static void mostrarTabuleiro(char[][] matriz){
+        System.out.print("Tabuleiro\n");
         for(int i = 0; i < 3; i++){
-            System.out.println("Soma da "+(i+1)+"a linha: "+somaLinhas[i]);
+            for (int j = 0; j < 3; j++) {
+                System.out.print(" "+matriz[i][j]+" ");
+                if(j < 2) System.out.print("|");
+            }
+            System.out.println();
+            if(i < 2) System.out.println("---+---+---");
         }
-        for(int i = 0; i < 3; i++) {
-            System.out.println("Soma da "+(i+1)+"a coluna: "+somaColunas[i]);
+        System.out.println();
+    }
+    public static boolean verificaVitoria(char[][] m, char j){
+        for (int i = 0; i < 3; i++) {
+            if(m[i][0] == j && m[i][1] == j && m[i][2] == j){return true;}
         }
-        input.close();
+        for (int i = 0; i < 3; i++) {
+            if(m[0][i] == j && m[1][i] == j && m[2][i] == j){return true;}
+        }
+        if(m[0][0] == j && m[1][1] == j && m[2][2] == j){return true;}
+        if(m[0][2] == j && m[1][1] == j && m[2][0] == j){return true;}
+        return false;
+    }
+    public static void notas(){
+        Scanner input = new Scanner(System.in);
+        int[][] matriz = new int[2][5];
+        String[] alunos = new String[5];
+        for(int i = 0; i < 5; i++){
+            System.out.println("Digite o nome do "+(i+1)+"° aluno: ");
+            alunos[i] = input.nextLine();
+            System.out.println("Digite a primeira nota do aluno: ");
+            matriz[0][i] = input.nextInt();
+            System.out.println("Digite a segunda nota do aluno: ");
+            matriz[1][i] = input.nextInt();
+            input.nextLine();
+        }
+        for (int i = 0; i < alunos.length; i++) {
+            System.out.print(alunos[i]+" ");
+        }
+        System.out.println();
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[i].length; j++) {
+                System.out.print(matriz[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+    public static void batalhaNaval(){
+        Scanner input = new Scanner(System.in);
+        char[][] mar = new char[7][7];
+        int posL, posC;
+        boolean venceu = false;
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 7; j++) {
+                mar[i][j] = ' ';
+            }
+        }
+        mar[0][3] = 'X';
+        mar[3][5] = 'X';
+        mar[6][1] = 'X';
+        while(mar[0][3] == 'X' || mar[3][5] == 'X' || mar[6][1] == 'X'){
+            System.out.println("Escolha a linha (de 0 a 6)");
+            posL = input.nextInt();
+            System.out.println("Escolha a coluna (de 0 a 6)");
+            posC = input.nextInt();
+            if(mar[posL][posC] != 'X'){
+                System.out.println("Nenhum navio por aqui marinheiro, continue");
+            }else{
+                System.out.println("Um navio encontrado! Continue até achar todos");
+                mar[posL][posC] = ' ';
+            }
+        }
+        System.out.println("Parabéns! Todos os navios foram encontrados");
     }
 }
