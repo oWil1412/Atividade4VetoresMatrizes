@@ -2,9 +2,26 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Escolha qual atividade quer rodar:\nDigite 1 - Matriz 3x3\nDigite 2 - Matriz 4x4 em Exibição Diagonal\nDigite 3 - Matriz 3x3 com Soma de linhas e colunas");
+        int atv = input.nextInt();
+        switch(atv){
+            case 1:
+                matriz3x3();
+                break;
+            case 2:
+                matriz4x4();
+                break;
+            case 3:
+                soma();
+                break;
+        }
+        input.close();
+    }
+    public static void matriz3x3(){
+        Scanner input = new Scanner(System.in);
         int[] matriz = new int[9];
         int temp = 0;
-        Scanner input = new Scanner(System.in);
         for(int i = 0; i < matriz.length; i++){
             System.out.println("Digite o "+(i+1)+"° número: ");
             matriz[i] = input.nextInt();
@@ -16,5 +33,66 @@ public class Main {
                 temp++;
             }
         }
+        input.close();
+    }
+    public static void matriz4x4(){
+        Scanner input = new Scanner(System.in);
+        int[] matriz = new int[16];
+        int temp = 0;
+        int[] diag = new int[4];
+        int exe = 0;// (executor) pega o num e joga pro vetor
+        for(int i = 0; i < matriz.length; i++){
+            System.out.println("Digite o "+(i+1)+"° número: ");
+            matriz[i] = input.nextInt();
+        }
+        for(int i = 0; i < 4; i++){
+            /*System.out.print("\n");
+            for(int j = 0; j < 4; j++) {
+                System.out.print(matriz[temp]+" ");
+                temp++;
+            }*/ //descomente as linhas acima para ver a matriz completa
+            diag[i] = matriz[exe]; //na primeira execução o exe é igual a 0 então pega o valor 1x1 da matriz
+            exe += 5; //na segunda execução o exe + 5 estará na posição 2x2 e assim em diante.
+        }
+        System.out.print("\nPrimeira diagonal (1x1 -> 4x4): ");
+        for(int i = 0; i < diag.length; i++) {
+            System.out.print(diag[i]+" ");
+        }
+        input.close();
+    }
+    public static void soma(){
+        Scanner input = new Scanner(System.in);
+        int[] matriz = new int[9];
+        int temp = 0;
+        int[] somaLinhas = new int[3];
+        int[] somaColunas = new int[3];
+        for(int i = 0; i < matriz.length; i++){
+            System.out.println("Digite o "+(i+1)+"° número: ");
+            matriz[i] = input.nextInt();
+        }
+        for(int i = 0; i < 3; i++){
+            System.out.print("\n");
+            for(int j = 0; j < 3; j++) {
+                System.out.print(matriz[temp]+" ");
+                somaLinhas[i] += matriz[temp];
+                temp++;
+            }
+        }
+        int j = 0;
+        for(int i = 0; i < 3; i++){
+            j = i;
+            for(int k = 0; k < 3; k++){
+                somaColunas[i] += matriz[j];
+                j += 3;
+            }
+        }
+        System.out.println("\n");
+        for(int i = 0; i < 3; i++){
+            System.out.println("Soma da "+(i+1)+"a linha: "+somaLinhas[i]);
+        }
+        for(int i = 0; i < 3; i++) {
+            System.out.println("Soma da "+(i+1)+"a coluna: "+somaColunas[i]);
+        }
+        input.close();
     }
 }
